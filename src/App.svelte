@@ -1,8 +1,7 @@
 <script>
     import PreviewComponent from "./PreviewComponent.svelte";
-    //Definimos el objeto
-    let noticias = [
-    {
+  
+    let noticias = [{
         titulo: 'Un nuevo estudio revela una forma efectiva de prevenir el estrés laboral',
         preview: 'La investigación sugiere que un aumento de actividades de ocio puede mejorar el bienestar en el trabajo.',
         contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
@@ -25,18 +24,29 @@
     {
         titulo: 'El equipo de fútbol local logra un importante triunfo en casa',
         preview: 'El equipo local consiguió una victoria por goleada en su propio estadio, y los aficionados celebraron la hazaña en las calles de la ciudad.',
-        contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim'}
-    ]
-</script>
+        contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim'}];
+  
+    let noticiaSeleccionada = null;
+  
+    function verNoticiaCompleta(event) {
+      noticiaSeleccionada = event.detail;
+    }
+  
+    function cerrarNoticia() {
+      noticiaSeleccionada = null;
+    }
+  </script>
+  
 
-
-<div class="portada">
     {#each noticias as noticia}
-      <div class="preview">
-        <h2>{noticia.titulo}</h2>
-        <p>{noticia.preview}</p>
-      </div> 
+      <PreviewComponent noticia={noticia} on:ver-noticia={verNoticiaCompleta} />
     {/each}
-  </div>
 
-
+  
+  {#if noticiaSeleccionada}
+    <div class="noticia">
+      <button on:click={cerrarNoticia}>Cerrar</button>
+      <h2>{noticiaSeleccionada.titulo}</h2>
+      <p>{noticiaSeleccionada.contenido}</p>
+    </div>
+  {/if}
