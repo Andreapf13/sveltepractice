@@ -27,7 +27,8 @@
         contenido: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim'}];
   
     let noticiaSeleccionada = null;
-  
+    let query;
+
     function verNoticiaCompleta(event) {
       noticiaSeleccionada = event.detail;
     }
@@ -35,18 +36,25 @@
     function cerrarNoticia() {
       noticiaSeleccionada = null;
     }
+    function filterNoticias(query, listaNoticias) {
+  // Filtra listaNoticias:Noticia[] según el texto query:string y devuelve un array de Noticia[] filtrado
+	return query === '' ?  listaNoticias : listaNoticias.filter(n => n.titulo.includes(query) || n.preview.includes(query))
+}
+$:noticiasFiltradas = filterNoticias(query, noticias);
   </script>
   
+  <input type="text" bind:value={query} placeholder="Buscar noticias">
 
-    {#each noticias as noticia}
-      <PreviewComponent noticia={noticia} on:ver-noticia={verNoticiaCompleta} />
-    {/each}
+{#each noticiasFiltradas as noticia}
+<PreviewComponent noticia={noticia} on:ver-noticia={verNoticiaCompleta} />
+{/each}
 
   
-  {#if noticiaSeleccionada}
-    <div class="noticia">
-      <button on:click={cerrarNoticia}>Cerrar</button>
-      <h2>{noticiaSeleccionada.titulo}</h2>
-      <p>{noticiaSeleccionada.contenido}</p>
-    </div>
-  {/if}
+
+{#if noticiaSeleccionada}
+  <div class="noticia">
+    <button on:click={cerrarNoticia}>Cerrar</button>
+    <h2>{noticiaSeleccionada.titulo}</h2>
+    <p>{noticiaSeleccionada.contenido}</p>
+  </div>
+{/if};
